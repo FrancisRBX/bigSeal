@@ -24,3 +24,9 @@ fetch('https://users.roblox.com/v1/users/210276149', {
 })
 .then(res => res.json())
 .then(data => console.log(data))
+
+export async function getPlaceAvailability(placeID : number){
+
+    let response = await fetch('https://games.roblox.com/v1/games/multiget-place-details?placeIds=' + placeID)
+
+}
