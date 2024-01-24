@@ -1,11 +1,10 @@
-import { Client, Collection, Events } from 'discord.js';
+import * as setClient from './client';
 import { deployCommands } from './deployCommands';
 import { commands } from './commands';
 import { config } from './config';
+import './listeners';
 
-const client = new Client({
-    intents: ["Guilds", "GuildMessages", "DirectMessages"],
-});
+const client = setClient.client;
 
 client.once('ready', () => {
     console.log("Discord bot is ready! 🤖");

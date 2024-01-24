@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, CommandInteraction } from "discord.js";
 
 
 export const data = new SlashCommandBuilder()
@@ -7,6 +6,6 @@ export const data = new SlashCommandBuilder()
   .setDescription('Replies with Pong!');
 
 export async function execute(interaction : CommandInteraction) {
-  //console.log(interaction);
-  await interaction.reply('Pong!');
+    console.log(interaction.toJSON());
+    await interaction.reply('Pong!');
 }

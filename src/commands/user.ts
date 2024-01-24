@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
-import { CommandInteraction } from "discord.js";
+import { SlashCommandBuilder, CommandInteraction } from "discord.js";
 
 export const data = new SlashCommandBuilder()
     .setName('user')
