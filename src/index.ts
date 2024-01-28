@@ -3,6 +3,7 @@ import { deployCommands } from './deployCommands';
 import { commands } from './commands';
 import { config } from './config';
 import './listeners';
+import './express';
 
 const client = setClient.client;
 

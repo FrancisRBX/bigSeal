@@ -14,7 +14,6 @@ export async function execute(interaction: CommandInteraction) {
   const profileID = interaction.options.get('profileid')?.value as string;
   const profileInfo = await routes.robloxRoutes.getRobloxProfile(profileID);
   const headShotURL = await routes.robloxRoutes.getRobloxProfileHeadshot(profileID);
-  console.log(headShotURL);
 
   const embed = new EmbedBuilder()
     .setTitle(`${profileInfo.name}'s Profile Information`)
