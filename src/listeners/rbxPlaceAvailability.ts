@@ -20,7 +20,7 @@ async function execute() {
             if (placeStatus === undefined) {
                 console.log('Failed to get place status');
             } else if (placeStatus === true) {
-                channel?.send('@everyone \nThis place is public https://www.roblox.com/games/15619487220');
+                channel?.send('@here \nThis place is public https://www.roblox.com/games/15619487220');
             }
         }
     }

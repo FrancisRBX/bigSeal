@@ -66,7 +66,7 @@ export async function getRobloxProfile(profileID: string) {
         const data = await response.json();
         return data;
     } catch (error) {
-
+        console.error('Error: ', error);
     }
 
 }
@@ -84,6 +84,29 @@ export async function getRobloxProfileHeadshot(profileID: string){
             const data = await response.json();
             return data.data[0].imageUrl;
         } catch (error) {
-    
+            console.error('Error: ', error);
         }
+}
+
+export async function getPWData(){
+    try {
+        const response = await fetch('https://apis.roblox.com/ordered-data-stores/v1/universes/2627033687/orderedDataStores/PAINWAY LORE LAGO/scopes/210276149/scope', {
+            method: "GET",
+            headers: {
+                Cookie: `.ROBLOSECURITY=${config.RBLX_COOKIE}`,
+                "Content-Type": "application/json",
+                "x-csrf-token": `${csrfToken}`,
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('Error: ', error);
+    }
 }
