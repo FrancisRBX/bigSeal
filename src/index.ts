@@ -3,7 +3,6 @@ import { deployCommands } from './deployCommands';
 import { commands } from './commands';
 import { config } from './config';
 import './listeners';
-import './express';
 
 const client = setClient.client;
 
@@ -30,3 +29,5 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 client.login(config.DISCORD_TOKEN);
+
+import './express'; // Start the express server
