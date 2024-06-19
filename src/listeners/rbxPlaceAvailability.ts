@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { routes } from "../routes";
+import { routes } from "../routesOLD";
 import * as Client from "../client";
 
 // guildID : 918930587723653211
@@ -26,4 +26,4 @@ async function execute() {
     }
 }
 
-execute();
+//execute();

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction } from "discord.js";
-import { routes } from "../routes";
+import { routes } from "../routesOLD";
 
 export const data = new SlashCommandBuilder()
     .setName('getplaceavailability')
