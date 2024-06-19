@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsx src/index.tsx --minify"
+    "build": "tsc --project tsconfig.json"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "tsup": "^8.0.1",
-    "tsx": "^4.7.0",
+    "tsx": "^4.15.6",
     "typescript": "^5.3.3"
   }
 }
