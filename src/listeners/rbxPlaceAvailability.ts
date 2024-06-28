@@ -1,6 +1,7 @@
 import { TextChannel } from "discord.js";
 import { routes } from "../routesOLD";
 import * as Client from "../client";
+import { cwd } from "process";
 
 // guildID : 918930587723653211
 // channelID : 918930587723653214
@@ -24,6 +25,16 @@ async function execute() {
             }
         }
     }
+}
+
+async function executeV2() {
+    
+
+    while (true) {
+        await new Promise(resolve => setTimeout(resolve, 3600000)); // 10000 milliseconds (10 second)
+        console.log('Health Check');
+    }
+    
 }
 
 //execute();
