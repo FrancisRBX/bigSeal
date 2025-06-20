@@ -12,16 +12,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.21",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.3.2",
-    "express": "^4.19.2",
-    "node": "^22.3.0"
+    "@types/express": "^4.17.23",
+    "discord.js": "^14.20.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "node": "^24.2.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "tsup": "^8.0.1",
-    "tsx": "^4.15.6",
-    "typescript": "^5.3.3"
+    "@types/dotenv": "^8.2.3",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder } from "discord.js";
+import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import { routes } from "../routesOLD";
 
 export const data = new SlashCommandBuilder()
@@ -9,7 +9,7 @@ export const data = new SlashCommandBuilder()
     .setDescription('The roblox profile ID')
     .setRequired(true));
 
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
   
   const profileID = interaction.options.get('profileid')?.value as string;
   const profileInfo = await routes.robloxRoutes.getRobloxProfile(profileID);
