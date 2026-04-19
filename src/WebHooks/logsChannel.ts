@@ -4,14 +4,14 @@ import { guildID } from './index';
 
 const channelID = '1351246417988943912';
 
-export async function sendMessage(packet : any) {
+export async function sendMessage(packet: any) {
     const client = Client.client;
     const guild = client.guilds.cache.get(guildID);
     console.log("Guild: " + guild);
     if (guild) {
 
-        var stringBuilder = '';
-        
+        let stringBuilder = '';
+
         stringBuilder = '**' + packet.playerName + '**' + ' chatted: **' + packet.message + '**';
 
         const channel: TextChannel = guild.channels.cache.get(channelID) as TextChannel;
