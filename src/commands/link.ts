@@ -1,97 +1,104 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, Message, MessageFlags } from "discord.js";
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
-export const robloxToDiscordMap = new Map<string, string>();
-export const discordToRobloxMap = new Map<string, string>();
-const pendingLinks = new Map<string, string>();
-
-function isRobloxId(str: string): boolean {
-    return /^\d+$/.test(str);
-}
-
-async function startLinking(interaction: ChatInputCommandInteraction, robloxId: string) {
-    const discordId = interaction.user.id;
-
-    if (robloxToDiscordMap.has(robloxId)) {
-        return await interaction.reply({ content: '❌ This Roblox ID is already linked to another Discord account.', flags: MessageFlags.Ephemeral });
-    }
-
-    const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-
-    pendingLinks.set(robloxId, code);
-
-    await interaction.reply({
-        content: `🔗 To verify your Roblox account **${robloxId}**, do the following:\n\n` +
-            `1. Go to [your Roblox profile](https://www.roblox.com/users/` + robloxId + `/profile) and paste this code into your bio/blurb:\n\n` +
-            `\`${code}\`\n\n` +
-            `2. Then run the command \`/link ${robloxId}\` to complete linking.`,
-        flags: MessageFlags.Ephemeral
-    });
-
-}
-
-async function finishLinking(interaction: ChatInputCommandInteraction, robloxId: string) {
-    const discordId = interaction.user.id;
-
-
-    if (robloxToDiscordMap.get(robloxId)) {
-        return await interaction.reply({ content: '❌ This Roblox ID is already linked to another Discord account.', flags: MessageFlags.Ephemeral });
-    }
-
-    const expectedCode = pendingLinks.get(robloxId);
-    if (!expectedCode) {
-        return await interaction.reply({ content: '❌ No pending verification found. Please use `/link` first.', flags: MessageFlags.Ephemeral });
-    }
-
-    try {
-        const userRes = await fetch(`https://users.roblox.com/v1/users/` + robloxId, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        });
-
-        const userData = await userRes.json();
-        const description = userData.description || '';
-
-        const found = description.includes(expectedCode);
-        if (!found) {
-            return interaction.reply({ content: "❌ Code not found in bio. Please add it to your Roblox profile and try again.", ephemeral: true });
-        }
-
-    } catch (error) {
-
-    }
-
-    robloxToDiscordMap.set(robloxId, discordId);
-    discordToRobloxMap.set(discordId, robloxId);
-    pendingLinks.delete(robloxId);
-
-    await interaction.reply({
-        content: `✅ Successfully linked your Roblox account **${robloxId}** to your Discord account!`,
-        flags: MessageFlags.Ephemeral
-    });
-
-}
+const LINK_AUTH_KEY = process.env.LINK_AUTH_KEY
 
 export const data = new SlashCommandBuilder()
     .setName('link')
-    .setDescription('Link your Roblox account to your Discord account')
-    .addStringOption(option =>
-        option.setName('roblox_id')
-            .setDescription('Your Roblox ID')
-            .setRequired(true));
+    .setDescription('Link your Roblox account to your Discord account');
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     const robloxId = interaction.options.getString('roblox_id');
 
-    if (!robloxId || !isRobloxId(robloxId)) {
-        await interaction.reply({ content: 'Please provide a valid Roblox ID and try again.', flags: MessageFlags.Ephemeral });
-        return;
-    }
+    console.log(interaction);
 
-    if (!pendingLinks.has(robloxId)) {
-        await startLinking(interaction, robloxId);
-        return;
+    const discordId = interaction.user.id;
 
-    } else {
-        finishLinking(interaction, robloxId);
-    }
+    axios.get(`https://vr3.dev/api/info/${discordId}`, {
+        headers: {
+            'Authorization': LINK_AUTH_KEY
+        }
+    })
+        .then(response => {
+            if (response.data.verified) {
+                interaction.reply({ content: 'You are already verified. Run /reverify if you wish to relink your account.', ephemeral: true });
+            } else {
+                const uniqueID = uuidv4();
+                axios.post('https://vr3.dev/api/verify', { discordId, displayName: interaction.user.displayName, uniqueID }, {
+                    headers: {
+                        'Authorization': LINK_AUTH_KEY
+                    }
+                })
+                    .then(() => {
+                        interaction.reply({ content: `Your verification link: https://vr3.dev/verify/${uniqueID}`, ephemeral: true });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        interaction.reply({ content: 'There was an error processing your verification. Please try again later.', ephemeral: true });
+                    });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            interaction.reply({ content: 'There was an error accessing verification information. Please try again later.', ephemeral: true });
+        });
+
+    //await interaction.reply({
+    //    content: `Buddy check your your console.`,
+    //    flags: MessageFlags.Ephemeral
+    //});
 }
+
+
+/*
+
+ client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    if (commandName === 'verify') {
+
+    } else if (commandName === 'reverify') {
+        const discordId = interaction.user.id;
+
+        axios.get(`https://vr3.dev/api/info/${discordId}`, {
+            headers: {
+                'Authorization': AUTH_KEY
+            }
+        })
+            .then(response => {
+                if (response.data.verified) {
+                    const verificationTime = moment(response.data.data.verificationTime);
+                    const now = moment();
+                    const diffDays = now.diff(verificationTime, 'days');
+
+                    if (diffDays < 14) {
+                        const nextEligibleDate = verificationTime.add(14, 'days').format('YYYY-MM-DD');
+                        interaction.reply({ content: `You must wait until ${nextEligibleDate} to reverify.`, ephemeral: true });
+                    } else {
+                        const uniqueID = uuidv4();
+                        axios.post('https://vr3.dev/api/verify', { discordId, displayName: interaction.user.displayName, uniqueID }, {
+                            headers: {
+                                'Authorization': AUTH_KEY
+                            }
+                        })
+                            .then(() => {
+                                interaction.reply({ content: `Your re-verification link: https://vr3.dev/verify/${uniqueID}`, ephemeral: true });
+                            })
+                            .catch(error => {
+                                console.error(error);
+                                interaction.reply({ content: 'There was an error processing your re-verification. Please try again later.', ephemeral: true });
+                            });
+                    }
+                } else {
+                    interaction.reply({ content: 'You are not currently verified. Use /verify to link your account.', ephemeral: true });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                interaction.reply({ content: 'There was an error accessing verification information. Please try again later.', ephemeral: true });
+            });
+    }
+});*/
