@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { DISCORD_TOKEN, DISCORD_CLIENT_ID, RBLX_COOKIE, BACK_HOST } = process.env;
+const { DISCORD_TOKEN, DISCORD_CLIENT_ID, RBLX_COOKIE, BACK_PORT, BOT_SECRET } = process.env;
 
 if (!DISCORD_TOKEN || !DISCORD_CLIENT_ID) {
   throw new Error('Missing environmental variables');
@@ -16,5 +16,6 @@ export const config = {
   DISCORD_TOKEN,
   DISCORD_CLIENT_ID,
   RBLX_COOKIE,
-  BACK_HOST
+  BACK_PORT : Number(BACK_PORT),
+  BOT_SECRET
 };
