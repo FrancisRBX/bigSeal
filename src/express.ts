@@ -18,10 +18,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 //routes 
 app.use('/', routes)
 
-app.get('/hi', (req: Request, res: Response) => {
-    res.send('WHat is good');
-});
-
 app.listen(config.BACK_PORT, "127.0.0.1", () => {
     console.log(`Example app listening at http://localhost:${config.BACK_PORT}`);
 });

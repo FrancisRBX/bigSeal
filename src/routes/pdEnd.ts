@@ -2,17 +2,12 @@ import { Request, Response } from 'express';
 import { Router } from 'express';
 import { WebHooks } from '../WebHooks';
 
-export const chatRoute = Router();
+export const pdRouteEnd = Router();
 
-export interface Chat {
-    playerName: string;
-    message: string;
-}
-
-chatRoute.route('/api/player_chatted')
+pdRouteEnd.route('/api/pd_end')
     .post((req: Request, res: Response) => {
         console.log(req.body);
-        const chat: Chat = req.body;
-        WebHooks.LogsChannel.sendMessage(req.body);
+        const chat = req.body;
+        WebHooks.PDLogsChannel.logPDEnd(req.body);
         res.status(201).json(chat);
     });

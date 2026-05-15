@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
 import { Router } from 'express';
 import { client } from '../client';
+import { WebHooks } from '../WebHooks';
 
 export const pdDeathRoute = Router();
 
 const guildID = '918930587723653211';
 
-pdDeathRoute.route('/PD_death')
+pdDeathRoute.route('/api/pd_death')
     .post(async (req: Request, res: Response) => {
         console.log(req.body);
-        const robloxId = req.body.playerId.toString();
+
+        const robloxId = req.body.playerID;
+
+        WebHooks.PDLogsChannel.logPlayerDeath(req.body);
 
         // This code block manages to timeout people on the discord whenever they die in pd and what not
 
